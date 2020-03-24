@@ -10,7 +10,6 @@ Method SendMessage(pRequest As Ens.StreamContainer, Output pResponse As Ens.Resp
 	Set ^TEST2($I(^TEST2),"Adapter.SMTPServer") = ..Adapter.SMTPServer
 	Set ^TEST2($I(^TEST2),"Adapter.Recipient") = ..Adapter.Recipient
 	Set email=##class(%Net.MailMessage).%New()
-	Do email.To.Insert("Oliver.Wilms@VA.GOV")
 	Set ^TEST2($I(^TEST2),"pRequest.OriginalFilename")=pRequest.OriginalFilename
 	Set ^TEST2($I(^TEST2),"pRequest.Stream")=pRequest.Stream
 	Set ^TEST2($I(^TEST2),"pRequest.Stream.Size")=pRequest.Stream.Size

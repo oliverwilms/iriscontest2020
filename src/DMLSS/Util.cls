@@ -1,6 +1,12 @@
 Class DMLSS.Util
 {
 
+ClassMethod DebugTEST(strMessage As %String = "") As %Status
+{
+	If $$$OK Set ^TESTdmlss($I(^TESTdmlss))=$ZDateTime($NOW(),8,1,3)_" : "_$JOB_" : "_strMessage
+	Quit $$$OK
+}
+
 ClassMethod StatusToText(pStatus As %Status) As %String
 {
 	Set tReturn = $System.Status.GetOneErrorText(pStatus)
@@ -73,6 +79,15 @@ ClassMethod Test() As %Status
 	Set server = ..HotPOPAsSMTP()
 	Set ^TEST($I(^TEST),"server") = server
 	Set ^TEST($I(^TEST)) = ..SendSimpleMessage(server)
+	Quit $$$OK
+}
+
+ClassMethod WriteFile(pFile As %String) As %Status
+{
+	Open pFile:("NRW"):5
+    Use pFile
+    Write "a line of data for the test file"
+	Close pFile
 	Quit $$$OK
 }
 

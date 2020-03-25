@@ -1,6 +1,22 @@
 Class DMLSS.Production Extends Ens.Production
 {
 
+ClassMethod OnStart(pTimeStarted As %String) As %Status
+{
+	Kill ^TESTdmlss
+	Do ##class(DMLSS.Util).DebugTEST("Production Time Started "_pTimeStarted)
+	Quit $$$OK
+}
+
+ClassMethod OnStop(
+	pTimeStopped As %String,
+	pForced As %Boolean) As %Status
+{
+	Do ##class(DMLSS.Util).DebugTEST("Production Time Stopped "_pTimeStopped)
+	Do ##class(DMLSS.Util).DebugTEST("Forced "_pForced)
+	Quit $$$OK
+}
+
 XData ProductionDefinition
 {
 <Production Name="DMLSS.NewProduction" LogGeneralTraceEvents="true">

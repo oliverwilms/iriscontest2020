@@ -82,14 +82,12 @@ Method CheckErrors() As %Status
 
 Method PutFile() As %Status
 {
-	#dim response As AET.ResStream
-	Do ##class(AET.TEST.Utility).DebugTEST("PutFile")
+	Do ##class(DMLSS.Util).DebugTEST("PutFile")
 	Set tSC = $$$OK
 	Set dir = ##class(%SYSTEM.Process).CurrentDirectory()  ; determine InterSystems IRIS directory
-	Do ##class(AET.TEST.Utility).DebugTEST("Directory is "_dir)
+	Do ##class(DMLSS.Util).DebugTEST("Directory is "_dir)
 	Set tFile = dir_"TestFile.txt"
-    Set tSC = ##class(DMLSS.Util).WriteFile(tFile)
-	Quit tSC
+    Quit ##class(DMLSS.Util).WriteFile(tFile)
 }
 
 }

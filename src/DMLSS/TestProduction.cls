@@ -18,7 +18,7 @@ Method OnBeforeProductionStart() As %Library.Status
 
 	Do ##class(DMLSS.Util).DebugTEST("OnBeforeProductionStart")
     Set dir = ##class(%SYSTEM.Process).CurrentDirectory()  ; determine InterSystems IRIS directory
-	Do ##class(AET.TEST.Utility).DebugTEST("Directory is "_dir)
+	Do ##class(DMLSS.Util).DebugTEST("Directory is "_dir)
 		
 	Set s = ..ChangeSetting(
 	"DMLSS.NewProduction","FileService", 

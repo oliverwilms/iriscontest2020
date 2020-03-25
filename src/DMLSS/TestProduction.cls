@@ -1,7 +1,7 @@
 Class DMLSS.TestProduction Extends %UnitTest.TestProduction
 {
 
-Parameter PRODUCTION = "DMLSS.NewProduction";
+Parameter PRODUCTION = "DMLSS.Production";
 
 Parameter IGNOREPRODUCTIONERRORS = 1;
 
@@ -21,12 +21,15 @@ Method OnBeforeProductionStart() As %Library.Status
 	Do ##class(DMLSS.Util).DebugTEST("Directory is "_dir)
 		
 	Set s = ..ChangeSetting(
-	"DMLSS.NewProduction","FileService", 
+	"DMLSS.Production","FileService", 
 	"FilePath",dir,0)
 	
 	Do $$$AssertEquals(s,$$$OK)
 	
-	if 's {Quit ..Error("Error in OnBeforeProductionStart()")}
+	if 's {
+        Do ##class(DMLSS.Util).DebugTEST($System.Status.GetOneErrorText(s))
+        Quit ..Error("Error in OnBeforeProductionStart()")
+    }
 	
 	Quit $$$OK
 }

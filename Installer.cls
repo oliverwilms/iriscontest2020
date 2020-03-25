@@ -16,8 +16,7 @@ XData setup
     </Configuration>
     <Import File="${SourceDir}" Flags="ck" Recurse="1"/>
     <CSPApplication Url="/csp/${app}" Directory="${cspdir}${app}"  ServeFiles="1" Recurse="1" MatchRoles=":%DB_${Namespace}" AuthenticationMethods="32"/>
-    <Production Name="${NAMESPACE}" 
-     AutoStart="1" />
+    <Production Name="DMLSS.NewProduction" AutoStart="1"/>
 
   </Namespace>
 

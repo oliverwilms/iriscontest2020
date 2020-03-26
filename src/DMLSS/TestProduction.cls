@@ -80,13 +80,14 @@ Method CheckErrors() As %Status
 	Quit tSC
 }
 
-Method PutFile() As %Status
+Method PutFile(pFilename As %String = "") As %Status
 {
 	Do ##class(DMLSS.Util).DebugTEST("PutFile")
 	Set tSC = $$$OK
 	Set dir = ##class(%SYSTEM.Process).CurrentDirectory()  ; determine InterSystems IRIS directory
 	Do ##class(DMLSS.Util).DebugTEST("Directory is "_dir)
-	Set tFile = dir_"TestFile.txt"
+	If (pFilename = "") Set pFilename = "TestFile.txt"
+	Set tFile = dir_pFilename
     Quit ##class(DMLSS.Util).WriteFile(tFile)
 }
 

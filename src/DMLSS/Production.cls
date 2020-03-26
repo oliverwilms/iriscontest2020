@@ -3,7 +3,7 @@ Class DMLSS.Production Extends Ens.Production
 
 ClassMethod OnStart(pTimeStarted As %String) As %Status
 {
-	Kill ^TESTdmlss
+	//Kill ^TESTdmlss
 	Do ##class(DMLSS.Util).DebugTEST("Production Time Started "_pTimeStarted)
 	Quit $$$OK
 }
@@ -20,12 +20,12 @@ ClassMethod OnStop(
 XData ProductionDefinition
 {
 <Production Name="DMLSS.NewProduction" LogGeneralTraceEvents="true">
-  <Description></Description>
+ <Description></Description>
   <ActorPoolSize>2</ActorPoolSize>
-  <Item Name="FileService" Category="" ClassName="EnsLib.File.PassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="FileService" Category="" ClassName="DMLSS.FilePassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="FilePath">/srv/hs/db/data/dmlss</Setting>
     <Setting Target="Adapter" Name="FileSpec">testFile???.txt</Setting>
-    <Setting Target="Host" Name="TargetConfigNames">EmailOperation</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">EmailOperation,OperationMailman</Setting>
     <Setting Target="Host" Name="ArchiveIO">1</Setting>
   </Item>
   <Item Name="EmailOperation" Category="" ClassName="DMLSS.EmailPassthroughOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
@@ -35,7 +35,18 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="SMTPPort">25</Setting>
     <Setting Target="Adapter" Name="SMTPServer">smtp.va.gov</Setting>
   </Item>
-</Production>
+  <Item Name="TCPService" Category="" ClassName="EnsLib.TCP.PassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Host" Name="ArchiveIO">1</Setting>
+    <Setting Target="Host" Name="GetStreamName">0</Setting>
+    <Setting Target="Adapter" Name="Port">3000</Setting>
+    <Setting Target="Adapter" Name="QSize">0</Setting>
+    <Setting Target="Adapter" Name="StayConnected">0</Setting>
+  </Item>
+  <Item Name="OperationMailman" Category="" ClassName="EnsLib.TCP.PassthroughOperation" PoolSize="2" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Host" Name="ArchiveIO">1</Setting>
+    <Setting Target="Adapter" Name="IPAddress">127.0.0.1</Setting>
+    <Setting Target="Adapter" Name="Port">3000</Setting>
+  </Item></Production>
 }
 
 }

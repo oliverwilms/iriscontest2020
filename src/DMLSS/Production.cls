@@ -8,9 +8,7 @@ ClassMethod OnStart(pTimeStarted As %String) As %Status
 	Quit $$$OK
 }
 
-ClassMethod OnStop(
-	pTimeStopped As %String,
-	pForced As %Boolean) As %Status
+ClassMethod OnStop(pTimeStopped As %String,	pForced As %Boolean) As %Status
 {
 	Do ##class(DMLSS.Util).DebugTEST("Production Time Stopped "_pTimeStopped)
 	Do ##class(DMLSS.Util).DebugTEST("Forced "_pForced)

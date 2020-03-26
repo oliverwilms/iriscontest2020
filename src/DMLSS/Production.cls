@@ -30,10 +30,10 @@ XData ProductionDefinition
   </Item>
   <Item Name="EmailOperation" Category="" ClassName="DMLSS.EmailPassthroughOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="ArchiveIO">1</Setting>
-    <Setting Target="Adapter" Name="From">dmlss@va.gov</Setting>
+    <Setting Target="Adapter" Name="From">owilms@oliverwilms.com</Setting>
     <Setting Target="Adapter" Name="Recipient">Oliver.Wilms@va.gov</Setting>
     <Setting Target="Adapter" Name="SMTPPort">25</Setting>
-    <Setting Target="Adapter" Name="SMTPServer">smtp.va.gov</Setting>
+    <Setting Target="Adapter" Name="SMTPServer">smtp.oliverwilms.com</Setting>
   </Item>
   <Item Name="TCPService" Category="" ClassName="EnsLib.TCP.PassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="ArchiveIO">1</Setting>

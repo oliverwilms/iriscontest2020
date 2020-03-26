@@ -41,7 +41,7 @@ Method OnAfterProductionStart() As %Status
 	For ii=1:1:pCount {
 		Write ii,"  "
 		Do ##class(DMLSS.Util).DebugTEST("Loop "_ii)
-		Set tSC = ..PutFile()
+		Set tSC = ..PutFile("testFile001.txt")
 	}
 	Quit tSC
 }

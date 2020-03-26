@@ -13,6 +13,12 @@ ClassMethod StatusToText(pStatus As %Status) As %String
 	Quit tReturn
 }
 
+ClassMethod DebugStatus(pStatus As %Status) As %Status
+{
+	Set tStatus = ..StatusToText(pStatus)
+	Quit ..DebugTEST(tStatus)
+}
+
 ClassMethod SendSimpleMessage(server As %Net.SMTP) As %List
 {
   Set msg = ##class(%Net.MailMessage).%New()
@@ -80,6 +86,37 @@ ClassMethod Test() As %Status
 	Set ^TEST($I(^TEST),"server") = server
 	Set ^TEST($I(^TEST)) = ..SendSimpleMessage(server)
 	Quit $$$OK
+}
+
+ClassMethod ValidateConfigItem(pName As %String) As %Status
+{
+	Set pName = $Get(pName)
+	Set tProdName = ##class(Ens.Director).GetActiveProductionName()
+	Set strWhere = "Name = '"_pName_"' and Production = '"_tProdName_"'"
+	Set strSQL = "select * from Ens_Config.Item where "_strWhere
+	Do ..DebugTEST("strSQL = "_strSQL)
+	Set tStatement = ##class(%SQL.Statement).%New()
+	Set qStatus = tStatement.%Prepare(strSQL)
+	If $$$ISERR(qStatus) {
+		Set msg = $system.Status.GetOneErrorText(qStatus)
+		Do ..DebugTEST("Util:ValidateConfigItem %Prepare failed : "_msg)
+		Quit qStatus
+	}
+	#dim rset As %SQL.StatementResult
+	Set rset = tStatement.%Execute()
+	If rset.%SQLCODE'=0 {
+		//rset.%SQLCODE=-361 { WRITE !,"Query exists: ",rset.%Message }
+		Do ..DebugTEST("Util:ValidateConfigItem rset.%SQLCODE : "_rset.%SQLCODE)
+		Do ..DebugTEST("Util:ValidateConfigItem rset.%Message : "_rset.%Message)
+		Quit $$$ERROR($$$GeneralError,"Unable to run SQL "_strSQL)
+	}
+	While rset.%Next() {
+		Set recCount = rset.%ROWCOUNT
+		Do ..DebugTEST("%ROWCOUNT : "_recCount)
+		Set tEnabled = rset.Enabled
+		Do ..DebugTEST("tEnabled : "_tEnabled)
+	}
+	Quit ($Get(tEnabled) = 1)
 }
 
 ClassMethod WriteFile(pFile As %String) As %Status

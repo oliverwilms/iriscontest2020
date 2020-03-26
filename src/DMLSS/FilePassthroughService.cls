@@ -15,9 +15,7 @@ Parameter CONTAINERCLASS = "Ens.StreamContainer";
 /// If the adapter has a value for ArchivePath, send async; otherwise send synchronously
 /// to ensure that we don't return to the Adapter and let it delete the file before the
 /// target Config Item is finished processing it.
-Method OnProcessInput(
-	pInput As %Stream.Object,
-	pOutput As %RegisteredObject) As %Status
+Method OnProcessInput(pInput As %Stream.Object, pOutput As %RegisteredObject) As %Status
 {
 	Do ##class(DMLSS.Util).DebugTEST("DMLSS.FilePassthroughService OnProcessInput")
 	Do ##class(DMLSS.Util).DebugTEST("pInput received "_pInput)
@@ -61,9 +59,7 @@ Method resolveAndIndex(pDoc As %Persistent) As %Status
 }
 
 /// Return an array of connections for drawing lines on the config diagram
-ClassMethod OnGetConnections(
-	Output pArray As %String,
-	pItem As Ens.Config.Item)
+ClassMethod OnGetConnections(Output pArray As %String, pItem As Ens.Config.Item)
 {
 	Do ##super(.pArray,pItem)
 	If pItem.GetModifiedSetting("TargetConfigNames",.tValue) {

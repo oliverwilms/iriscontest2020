@@ -33,14 +33,14 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="SMTPPort">25</Setting>
     <Setting Target="Adapter" Name="SMTPServer">smtp.oliverwilms.com</Setting>
   </Item>
-  <Item Name="TCPService" Category="" ClassName="EnsLib.TCP.PassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="TCPService" Category="" ClassName="DMLSS.TCPPassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="ArchiveIO">1</Setting>
     <Setting Target="Host" Name="GetStreamName">0</Setting>
     <Setting Target="Adapter" Name="Port">3000</Setting>
     <Setting Target="Adapter" Name="QSize">0</Setting>
     <Setting Target="Adapter" Name="StayConnected">0</Setting>
   </Item>
-  <Item Name="OperationMailman" Category="" ClassName="EnsLib.TCP.PassthroughOperation" PoolSize="2" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="OperationMailman" Category="" ClassName="DMLSS.TCPPassthroughOperation" PoolSize="2" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="ArchiveIO">1</Setting>
     <Setting Target="Adapter" Name="IPAddress">127.0.0.1</Setting>
     <Setting Target="Adapter" Name="Port">3000</Setting>

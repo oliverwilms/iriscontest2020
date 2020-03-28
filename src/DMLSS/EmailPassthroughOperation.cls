@@ -1,14 +1,18 @@
 Class DMLSS.EmailPassthroughOperation Extends Ens.BusinessOperation
 {
 
-Parameter ADAPTER = "EnsLib.EMail.OutboundAdapter";
+Parameter ADAPTER = "DMLSS.EMailOutboundAdapter";
 
 Parameter INVOCATION = "Queue";
 
-Method SendMessage(
-	pRequest As Ens.StreamContainer,
-	Output pResponse As Ens.Response) As %Status
+/// To be used in place of localhost when using Mailman server.
+Property Domain As %String;
+
+Parameter SETTINGS = "Domain";
+
+Method SendMessage(pRequest As Ens.StreamContainer, Output pResponse As Ens.Response) As %Status
 {
+	Set pResponse = $$$NULLOREF
 	Do ##class(DMLSS.Util).DebugTEST("DMLSS.EmailPassthroughOperation SendMessage")
 	Quit:'$IsObject(pRequest.Stream) $$$ERROR($$$EnsErrGeneral,"No Stream contained in StreamContainer Request")
 	Do ##class(DMLSS.Util).DebugTEST("pRequest received "_pRequest)
@@ -24,8 +28,12 @@ Method SendMessage(
 	//Set tSC = email.AttachStream(pRequest.Stream,pRequest.OriginalFilename,0)
 	Set tSC = email.TextData.CopyFrom(pRequest.Stream)
 	Do ##class(DMLSS.Util).DebugStatus(tSC)
-	//Set email.Subject = pRequest.OriginalFilename
 	Set email.Subject = ##class(%File).GetFilename(pRequest.OriginalFilename)
+	Do ##class(DMLSS.Util).DebugTEST("Adapter.SMTP.localhost "_..Adapter.SMTP.localhost)
+	If (..Domain '= "") {
+		Set ..Adapter.SMTP.localhost = ..Domain
+	}
+	Do ##class(DMLSS.Util).DebugTEST("Adapter.SMTP.localhost "_..Adapter.SMTP.localhost)
 	Do ##class(DMLSS.Util).DebugTEST("before ..Adapter.SendMail")
 	Set tSC=..Adapter.SendMail(email,.pFailedRecipients)
 	Do ##class(DMLSS.Util).DebugTEST("after ..Adapter.SendMail")

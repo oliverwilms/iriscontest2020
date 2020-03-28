@@ -27,6 +27,7 @@ Method OnProcessInput(pInput As %Stream.Object, pOutput As %RegisteredObject) As
 	Set tSC=..resolveAndIndex(pInput) Quit:$$$ISERR(tSC) tSC
 	Set tWorkArchive=(""'=..Adapter.ArchivePath)&&(..Adapter.ArchivePath=..Adapter.WorkPath || (""=..Adapter.WorkPath && (..Adapter.ArchivePath=..Adapter.FilePath)))
 	$$$SyncCommitSet(tSyncCommit)
+	Do ##class(DMLSS.Util).DebugTEST("tSyncCommit "_$Get(tSyncCommit))
 	For iTarget=1:1:$L(..TargetConfigNames, ",") { Set tOneTarget=$ZStrip($P(..TargetConfigNames,",",iTarget),"<>W")  Continue:""=tOneTarget
 		Do ##class(DMLSS.Util).DebugTEST("iTarget "_iTarget)
 		Do ##class(DMLSS.Util).DebugTEST("tOneTarget "_tOneTarget)
@@ -45,7 +46,7 @@ Method OnProcessInput(pInput As %Stream.Object, pOutput As %RegisteredObject) As
 			Do ##class(DMLSS.Util).DebugTEST("after SendRequestSync")
 		}
 	}
-	Do ##class(DMLSS.Util).DebugTEST("tSyncCommit "_tSyncCommit)
+	Do ##class(DMLSS.Util).DebugTEST("tSyncCommit "_$Get(tSyncCommit))
 	$$$SyncCommitClear(tSyncCommit)
 	Do ##class(DMLSS.Util).DebugTEST("after $$$SyncCommitClear")
 	Do ##class(DMLSS.Util).DebugStatus(tSC)

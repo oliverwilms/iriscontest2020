@@ -19,17 +19,16 @@ Method OnBeforeProductionStart() As %Library.Status
     Set dir = ##class(%SYSTEM.Process).CurrentDirectory()  ; determine InterSystems IRIS directory
 	Do ##class(DMLSS.Util).DebugTEST("Directory is "_dir)
 	Do ##class(DMLSS.Util).DebugTEST("Attempt to change FileService FilePath setting...")
-	Set s = ..ChangeSetting(
-	"DMLSS.Production","FileService", 
-	"FilePath",dir,0)
-	
-	Do $$$AssertEquals(s,$$$OK)
-	
-	if 's {
-        Do ##class(DMLSS.Util).DebugTEST($System.Status.GetOneErrorText(s))
+	Set s1 = ..ChangeSetting("DMLSS.Production","FileService","FilePath",dir,0)
+    Do ##class(DMLSS.Util).DebugTEST($System.Status.GetOneErrorText(s1))
+	Do $$$AssertEquals(s1,$$$OK)
+	Do ##class(DMLSS.Util).DebugTEST("Attempt to change EmailOperation FailureTimeout setting...")
+	Set s2 = ..ChangeSetting("DMLSS.Production","EmailOperation","FailureTimeout",6,0)
+    Do ##class(DMLSS.Util).DebugTEST($System.Status.GetOneErrorText(s2))
+	Do $$$AssertEquals(s2,$$$OK)
+	if 's1||'s2 {
         Quit ..Error("Error in OnBeforeProductionStart()")
     }
-	Do ##class(DMLSS.Util).DebugTEST("...Okay")
 	Quit $$$OK
 }
 
@@ -49,16 +48,6 @@ Method CheckResults(ByRef Log As %String, New As %String) As %Status
 {
 	Do ##class(DMLSS.Util).DebugTEST("CheckResults")
 	Set tSC = $$$OK
-	Set zA1 = $Get(^CacheTempResponse($Job,"A1"))
-	Set zA4 = $Get(^CacheTempResponse($Job,"A4"))
-	Set zAAA = $Get(^CacheTempResponse($Job,"AAA"))
-	Set zERR = $Get(^CacheTempResponse($Job,"ERR"))
-	Set total = zA1 + zA4 + zAAA + zERR
-	Write "A1 = "_zA1,!
-	Write "A4 = "_zA4,!
-	Write "AAA = "_zAAA,!
-	Write "ERR = "_zERR,!
-	Write "Total: "_total,!
 	Quit tSC
 }
 
@@ -84,6 +73,18 @@ Method CheckErrors() As %Status
 	Quit tSC
 }
 
+Method OnAfterProductionStop() As %Status
+{
+	Do ##class(DMLSS.Util).DebugTEST("OnAfterProductionStop")
+	Set pCount = 1
+	For ii=1:1:pCount {
+		Write ii,"  "
+		Do ##class(DMLSS.Util).DebugTEST("Loop "_ii)
+		Set tSC = ..RemoveFile("testFile001.txt")
+	}
+	Quit tSC
+}
+
 Method PutFile(pFilename As %String = "") As %Status
 {
 	Do ##class(DMLSS.Util).DebugTEST("PutFile")
@@ -93,6 +94,19 @@ Method PutFile(pFilename As %String = "") As %Status
 	If (pFilename = "") Set pFilename = "TestFile.txt"
 	Set tFile = dir_pFilename
     Quit ##class(DMLSS.Util).WriteFile(tFile)
+}
+
+Method RemoveFile(pFilename As %String = "") As %Status
+{
+	Do ##class(DMLSS.Util).DebugTEST("RemoveFile")
+	Set tSC = $$$OK
+	Set dir = ##class(%SYSTEM.Process).CurrentDirectory()  ; determine InterSystems IRIS directory
+	Do ##class(DMLSS.Util).DebugTEST("Directory is "_dir)
+	If (pFilename = "") Set pFilename = "TestFile.txt"
+	Set tFile = dir_pFilename
+	Set tReturn	= ##class(%File).Delete(tFile)
+	Do ##class(DMLSS.Util).DebugTEST("##class(%File).Delete(tFile) return "_tReturn)
+    Quit tSC
 }
 
 }

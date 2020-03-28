@@ -23,7 +23,7 @@ XData ProductionDefinition
   <Item Name="FileService" Category="" ClassName="DMLSS.FilePassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="FilePath">/srv/hs/db/data/dmlss</Setting>
     <Setting Target="Adapter" Name="FileSpec">testFile???.txt</Setting>
-    <Setting Target="Host" Name="TargetConfigNames">EmailOperation,OperationMailman</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">EmailOperation</Setting>
     <Setting Target="Host" Name="ArchiveIO">1</Setting>
   </Item>
   <Item Name="EmailOperation" Category="" ClassName="DMLSS.EmailPassthroughOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">

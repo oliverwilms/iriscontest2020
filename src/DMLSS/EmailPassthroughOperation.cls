@@ -5,19 +5,31 @@ Parameter ADAPTER = "EnsLib.EMail.OutboundAdapter";
 
 Parameter INVOCATION = "Queue";
 
-Method SendMessage(pRequest As Ens.StreamContainer, Output pResponse As Ens.Response) As %Status
+Method SendMessage(
+	pRequest As Ens.StreamContainer,
+	Output pResponse As Ens.Response) As %Status
 {
-	Set ^TEST2($I(^TEST2),"Adapter.SMTPServer") = ..Adapter.SMTPServer
-	Set ^TEST2($I(^TEST2),"Adapter.Recipient") = ..Adapter.Recipient
+	Do ##class(DMLSS.Util).DebugTEST("DMLSS.EmailPassthroughOperation SendMessage")
+	Quit:'$IsObject(pRequest.Stream) $$$ERROR($$$EnsErrGeneral,"No Stream contained in StreamContainer Request")
+	Do ##class(DMLSS.Util).DebugTEST("pRequest received "_pRequest)
+	Do ##class(DMLSS.Util).DebugTEST("pRequest.OriginalFilename "_pRequest.OriginalFilename)
+	Do ##class(DMLSS.Util).DebugTEST("pRequest.Stream "_pRequest.Stream)
+	Do ##class(DMLSS.Util).DebugTEST("pRequest.Stream.Size "_pRequest.Stream.Size)
+	Do ##class(DMLSS.Util).DebugTEST("Adapter.SMTPServer "_..Adapter.SMTPServer)
+	Do ##class(DMLSS.Util).DebugTEST("Adapter.Recipient "_..Adapter.Recipient)
 	Set email=##class(%Net.MailMessage).%New()
-	Set ^TEST2($I(^TEST2),"pRequest.OriginalFilename")=pRequest.OriginalFilename
-	Set ^TEST2($I(^TEST2),"pRequest.Stream")=pRequest.Stream
-	Set ^TEST2($I(^TEST2),"pRequest.Stream.Size")=pRequest.Stream.Size
+	Set tSC = email.ContentTransferEncodingSet("7bit")
+	Do ##class(DMLSS.Util).DebugStatus(tSC)
+	//Set tSC = email.TextData.Write("test1234")
+	//Set tSC = email.AttachStream(pRequest.Stream,pRequest.OriginalFilename,0)
 	Set tSC = email.TextData.CopyFrom(pRequest.Stream)
-	Set ^TEST2($I(^TEST2),"TextData tSC")=$System.Status.GetOneErrorText(tSC)
-	Set email.Subject = pRequest.OriginalFilename
+	Do ##class(DMLSS.Util).DebugStatus(tSC)
+	//Set email.Subject = pRequest.OriginalFilename
+	Set email.Subject = ##class(%File).GetFilename(pRequest.OriginalFilename)
+	Do ##class(DMLSS.Util).DebugTEST("before ..Adapter.SendMail")
 	Set tSC=..Adapter.SendMail(email,.pFailedRecipients)
-	Set ^TEST2($I(^TEST2),"SendMail tSC")=$System.Status.GetOneErrorText(tSC)
+	Do ##class(DMLSS.Util).DebugTEST("after ..Adapter.SendMail")
+	Do ##class(DMLSS.Util).DebugStatus(tSC)
 	Quit tSC
 }
 

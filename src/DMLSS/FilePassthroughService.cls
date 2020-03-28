@@ -25,12 +25,12 @@ Method OnProcessInput(pInput As %Stream.Object, pOutput As %RegisteredObject) As
 	Do ##class(DMLSS.Util).DebugTEST("pInput.Stream "_pInput.Stream)
 	Do ##class(DMLSS.Util).DebugTEST("pInput.Stream.Size "_pInput.Stream.Size)
 	Set tSC=..resolveAndIndex(pInput) Quit:$$$ISERR(tSC) tSC
-	//S ^TEST2($I(^TEST2),"resolveAndIndex")=tSC
 	Set tWorkArchive=(""'=..Adapter.ArchivePath)&&(..Adapter.ArchivePath=..Adapter.WorkPath || (""=..Adapter.WorkPath && (..Adapter.ArchivePath=..Adapter.FilePath)))
 	$$$SyncCommitSet(tSyncCommit)
 	For iTarget=1:1:$L(..TargetConfigNames, ",") { Set tOneTarget=$ZStrip($P(..TargetConfigNames,",",iTarget),"<>W")  Continue:""=tOneTarget
-		S ^TEST2($I(^TEST2),"For")=iTarget
 		Do ##class(DMLSS.Util).DebugTEST("iTarget "_iTarget)
+		Do ##class(DMLSS.Util).DebugTEST("tOneTarget "_tOneTarget)
+		If '(##class(DMLSS.Util).ValidateConfigItem(tOneTarget)) Continue  // Skip disabled target
 		$$$sysTRACE("Sending input Stream "_pInput.Stream_"("_pInput.Stream.Size_")"_$S(tWorkArchive:" Async",1:" Sync")_" from '"_tSource_"' to '"_tOneTarget_"'")
 		Set tTRACE=("Sending input Stream "_pInput.Stream_"("_pInput.Stream.Size_")"_$S(tWorkArchive:" Async",1:" Sync")_" from '"_tSource_"' to '"_tOneTarget_"'")
 		Do ##class(DMLSS.Util).DebugTEST(tTRACE)

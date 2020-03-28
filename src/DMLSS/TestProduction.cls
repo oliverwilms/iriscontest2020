@@ -9,7 +9,6 @@ Parameter IGNOREPRODUCTIONERRORS = 1;
 	Set ^UnitTestRoot = ""
 	Do ##class(DMLSS.TestProduction).Run()
 */
-
 Method OnBeforeProductionStart() As %Library.Status
 {
 	KILL ^TEST
@@ -19,7 +18,7 @@ Method OnBeforeProductionStart() As %Library.Status
 	Do ##class(DMLSS.Util).DebugTEST("OnBeforeProductionStart")
     Set dir = ##class(%SYSTEM.Process).CurrentDirectory()  ; determine InterSystems IRIS directory
 	Do ##class(DMLSS.Util).DebugTEST("Directory is "_dir)
-		
+	Do ##class(DMLSS.Util).DebugTEST("Attempt to change FileService FilePath setting...")
 	Set s = ..ChangeSetting(
 	"DMLSS.Production","FileService", 
 	"FilePath",dir,0)
@@ -30,7 +29,7 @@ Method OnBeforeProductionStart() As %Library.Status
         Do ##class(DMLSS.Util).DebugTEST($System.Status.GetOneErrorText(s))
         Quit ..Error("Error in OnBeforeProductionStart()")
     }
-	
+	Do ##class(DMLSS.Util).DebugTEST("...Okay")
 	Quit $$$OK
 }
 
@@ -65,18 +64,23 @@ Method CheckResults(ByRef Log As %String, New As %String) As %Status
 
 Method CheckErrors() As %Status
 {
+	// Expect 3 errors
 	Do ##class(DMLSS.Util).DebugTEST("CheckErrors")
+	Kill ^TESTdmlss("CheckErrors")
 	Set tSC = $$$OK
 	Set s = ..GetEventLog("error","","",.err,.new)
-	//Set s1 = $$$AssertEquals(new,3,"Should be 3 new errors(found: "_+$Get(new)_")")
+	Merge ^TESTdmlss("CheckErrors","err")=err
+	Merge ^TESTdmlss("CheckErrors","new")=new
+	
+	Set s1 = $$$AssertEquals(new,3,"Should be 3 new errors(found: "_+$Get(new)_")")
 		
 	Set text = $Get(err(1,"Text"))
-	Set eText = "Test error case"
-	Write "text = "_text,!
-	//Set s2 = $$$AssertTrue(text[eText,"Should contain '"_eText_"'(found: '"_text_"')")
+	Set eText = "#6031:"
+	//Write "text = "_text,!
+	Set s2 = $$$AssertTrue(text[eText,"Should contain '"_eText_"'(found: '"_text_"')")
 	
-	//if 's1||'s2 set tSC=..Error("Expected error entries don't match")
-	Do ##class(DMLSS.Util).DebugTEST(text)
+	if 's1||'s2 set tSC=..Error("Expected error entries don't match")
+	//Do ##class(DMLSS.Util).DebugTEST(text)
 	Quit tSC
 }
 

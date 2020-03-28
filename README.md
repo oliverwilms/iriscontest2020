@@ -32,3 +32,10 @@ USER>zn "IRISAPP"
 IRISAPP>set ^UnitTestRoot=""
 IRISAPP>do ##class(DMLSS.TestProduction).Run()
 ```
+## Want to know what hapened in your Production?
+
+I wondered, too. I did the work to write a detailed log to ^TESTdmlss.
+
+```
+IRISAPP>ZW ^TESTdmlss
+```

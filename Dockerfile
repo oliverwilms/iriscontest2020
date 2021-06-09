@@ -4,12 +4,16 @@ ARG IMAGE=store/intersystems/iris-community:2019.4.0.379.0
 ARG IMAGE=store/intersystems/iris-community:2020.1.0.199.0
 ARG IMAGE=intersystemsdc/iris-community:2019.4.0.383.0-zpm
 FROM $IMAGE
+# bringing the standard shell back from broken image
+SHELL ["/bin/bash", "-c"]
 
 USER root
 
 WORKDIR /opt/irisapp
 RUN chown ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /opt/irisapp
-
+RUN mkdir -p /intersystems/irishealth/mgr/oliver/  \
+ && chown -R ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /intersystems/irishealth/mgr/oliver
+ 
 USER irisowner
 
 COPY  Installer.cls .

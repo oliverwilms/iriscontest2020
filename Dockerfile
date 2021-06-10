@@ -18,7 +18,6 @@ USER irisowner
 
 COPY  Installer.cls .
 COPY  src src
-copy  datat data
 COPY irissession.sh /
 SHELL ["/irissession.sh"]
 

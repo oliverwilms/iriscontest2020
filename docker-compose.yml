@@ -7,9 +7,12 @@ services:
     restart: always
     ports:
       - 3000
-      - 51773
+# SuperServer Port new      
+#      - 51773
+      - 1972
       - 52773
       - 53773
     volumes:
-      - ~/iris.key:/usr/irissys/mgr/iris.key
+# no license required for community image    
+#      - ~/iris.key:/usr/irissys/mgr/iris.key
       - ./:/irisdev/app
